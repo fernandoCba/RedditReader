@@ -15,8 +15,7 @@
         completions."
     </string>
 
-    <string name="title_activity_news">"Activity News"
-    </string>
+    <string name="title_activity_news">@string/app_name</string>
 
 
 </resources>

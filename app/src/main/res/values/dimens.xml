@@ -3,4 +3,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="news_upper_content">12dp</dimen>
+    <dimen name="news_content">14dp</dimen>
+    <dimen name="content_footer_height">12dp</dimen>
 </resources>
