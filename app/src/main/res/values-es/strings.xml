@@ -14,7 +14,8 @@
     <string name="permission_rationale">"Se necesitan permisos de acceso a Contactos para proveer
         autocompletado de emails."
     </string>
-
+    <string name="post_title_and_author">#TITLE# Creado por #AUTHOR#</string>
+    <string name="post_comments">#COMMENTS# comentario(s).</string>
     <string name="title_activity_news">@string/app_name</string>
 
 

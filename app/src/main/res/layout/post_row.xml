@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="ar.edu.unc.famaf.redditreader.ui.NewsActivityFragment"
+    tools:context="ar.edu.unc.famaf.redditreader.NewsActivityFragment"
     tools:showIn="@layout/activity_news">
 
 
@@ -40,6 +40,37 @@
         android:layout_toStartOf="@+id/next_content_img" />
 
 
+    <TextView
+        android:id="@+id/news_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/post_title_and_author"
+        android:textSize="@dimen/news_content"
+        android:layout_toRightOf="@id/news_icon"
+        android:layout_below="@id/timespanContent"
+        android:layout_alignRight="@+id/timespanContent"
+        android:layout_alignEnd="@+id/timespanContent" />
+
+    <ImageButton
+        android:id="@+id/comments_icon"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_below="@id/news_content"
+        android:layout_toRightOf="@id/news_icon"
+        android:background="@android:color/transparent"
+        android:src="@android:drawable/sym_action_chat" />
+
+    <TextView
+        android:id="@+id/number_comments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/news_upper_content"
+        android:text="@string/post_comments"
+        android:layout_toRightOf="@id/comments_icon"
+        android:layout_alignTop="@id/comments_icon"
+        android:paddingTop="10dp"
+        />
+
     <ImageButton
         android:id="@+id/next_content_img"
         android:layout_width="wrap_content"
@@ -51,56 +82,4 @@
         android:layout_alignParentEnd="true"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="20dp" />
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/postTitle"
-        android:layout_above="@+id/news_content"
-        android:layout_toRightOf="@+id/news_icon"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:textStyle="normal|bold" />
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/news_content"
-        android:layout_alignLeft="@+id/comments_icon"
-        android:layout_alignStart="@+id/comments_icon"
-        android:id="@+id/postAuthor" />
-
-    <ImageButton
-        android:id="@+id/comments_icon"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:background="@android:color/transparent"
-        android:src="@android:drawable/sym_action_chat"
-        android:layout_below="@+id/postAuthor"
-        android:layout_alignLeft="@+id/news_content"
-        android:layout_alignStart="@+id/news_content" />
-
-    <TextView
-        android:id="@+id/number_comments"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/news_upper_content"
-        android:text="2012 comentarios"
-        android:paddingTop="10dp"
-        android:layout_below="@+id/postAuthor"
-        android:layout_alignRight="@+id/loginStatusTextView"
-        android:layout_alignEnd="@+id/loginStatusTextView" />
-
-    <TextView
-        android:id="@+id/news_content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Lorem"
-        android:textSize="@dimen/news_content"
-        android:layout_alignTop="@+id/next_content_img"
-        android:layout_toRightOf="@+id/news_icon"
-        android:layout_toEndOf="@+id/news_icon" />
-
 </RelativeLayout>
-

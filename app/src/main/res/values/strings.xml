@@ -14,7 +14,8 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-
+    <string name="post_title_and_author">#TITLE# Created by #AUTHOR#</string>
+    <string name="post_comments">#COMMENTS# comment(s).</string>
     <string name="title_activity_news">@string/app_name</string>
 
 

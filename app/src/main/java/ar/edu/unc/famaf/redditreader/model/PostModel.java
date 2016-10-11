@@ -7,7 +7,11 @@ public class PostModel {
     private String mTitle;
     private String mAuthor;
     private String mCreatedOn;
-    private String mImageUrl;
+
+
+
+    private int mComments;
+    private int mImage;
 
     public String getTitle() {
         return mTitle;
@@ -33,11 +37,18 @@ public class PostModel {
         this.mCreatedOn = mCreatedOn;
     }
 
-    public String getImageUrl() {
-        return mImageUrl;
+    public int getComments() {
+        return mComments;
     }
 
-    public void setImageUrl(String mImageUrl) {
-        this.mImageUrl = mImageUrl;
+    public void setComments(int mComments) {
+        this.mComments = mComments;
+    }
+    public int getImage() {
+        return mImage;
+    }
+
+    public void setImageUrl(int mImageUrl) {
+        this.mImage = mImageUrl;
     }
 }
