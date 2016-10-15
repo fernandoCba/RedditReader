@@ -26,6 +26,7 @@ public class Backend {
             p.setCreatedOn("10/09/2016");
             p.setTitle("Title " + i);
             p.setImageUrl(images[i%images.length]);
+            p.setComments(i*5);
             list.add(p);
         }
         return list;
