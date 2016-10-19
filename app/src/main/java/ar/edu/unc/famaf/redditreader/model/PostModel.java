@@ -7,11 +7,8 @@ public class PostModel {
     private String mTitle;
     private String mAuthor;
     private String mCreatedOn;
-
-
-
     private int mComments;
-    private int mImage;
+    private String mImage;
 
     public String getTitle() {
         return mTitle;
@@ -44,11 +41,11 @@ public class PostModel {
     public void setComments(int mComments) {
         this.mComments = mComments;
     }
-    public int getImage() {
+    public String getImage() {
         return mImage;
     }
 
-    public void setImageUrl(int mImageUrl) {
+    public void setImageUrl(String mImageUrl) {
         this.mImage = mImageUrl;
     }
 }

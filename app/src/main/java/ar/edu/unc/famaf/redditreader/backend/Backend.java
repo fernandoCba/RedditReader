@@ -18,7 +18,10 @@ public class Backend {
 
     public List<PostModel> getTopPosts() {
         List<PostModel> list = new ArrayList<PostModel>();
-        int[] images = new int[]{R.drawable.carrots, R.drawable.legs, R.drawable.dog};
+        String[] images = new String[]{
+                "http://b.thumbs.redditmedia.com/sAL2NHm198e7bmk4MjFlMotYJPbVVZCk11pDcdJuliU.jpg",
+                "http://a.thumbs.redditmedia.com/TyMvfQ0OJNikhHObKMrA9JUXEQbNFsAeuXK9GJx4BH4.jpg",
+                "http://b.thumbs.redditmedia.com/xusZjnsKKM_0lWHtpyGoUtFYBsDs_sTZwLVb8nCMI2Y.jpg"};
         PostModel p;
         for (int i = 0; i < 5; i++) {
             p = new PostModel();
