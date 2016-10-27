@@ -11,12 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
@@ -27,12 +26,12 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
     private final String mPostTitleAndAuthorText;
     private final String mCommentsText;
     private List<PostModel> mPosts;
-    private Context context;
+    private Context mContext;
 
     public PostAdapter(Context context, int fragment_news, List<PostModel> postModelList) {
         super(context, fragment_news, postModelList);
         mPosts = postModelList;
-        this.context = context;
+        this.mContext = context;
         mPostTitleAndAuthorText = context.getResources()
                 .getString(R.string.post_title_and_author);
         mCommentsText = context.getResources()
@@ -67,8 +66,12 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.post_row, null);
+
+        }
+        if (convertView.getTag() == null) {
             viewHolder = new ViewHolder(
                     (ImageView) convertView.findViewById(R.id.news_icon),
+                    (ProgressBar) convertView.findViewById(R.id.progressBarNewsIcon),
                     (TextView) convertView.findViewById(R.id.news_content),
                     (TextView) convertView.findViewById(R.id.number_comments)
             );
@@ -76,9 +79,9 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        PostModel post = mPosts.get(position);
 
-        TextView postContent = viewHolder.postContentView;
+        PostModel post = mPosts.get(position);
+        TextView postContent = viewHolder.mPostContentView;
         CharSequence contentText = postContent.getText();
         String s = mPostTitleAndAuthorText.replace("#TITLE#", post.getTitle()).replace("#AUTHOR#", post.getAuthor());
         postContent.setText(s);
@@ -87,13 +90,13 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
         String imgUrl = post.getImage();
         try {
             urlArray[0] = new URL(imgUrl);
-        } catch (MalformedURLException e) {
+            DownloadImageAsyncTask downloadImageAsyncTask = new DownloadImageAsyncTask(viewHolder.mImageView, viewHolder.mProgressBar);
+            downloadImageAsyncTask.execute(urlArray);
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        DownloadImageAsyncTask downloadImageAsyncTask = new DownloadImageAsyncTask(viewHolder.imageView);
-        downloadImageAsyncTask.execute(urlArray);
 
-        TextView comments = viewHolder.commentsView;
+        TextView comments = viewHolder.mCommentsView;
         s = mCommentsText.replace("#COMMENTS#", "" + post.getComments());
         comments.setText(s);
 
@@ -101,27 +104,35 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
     }
 
     private class ViewHolder {
-        public final ImageView imageView;
-        public final TextView postContentView;
-        public final TextView commentsView;
+        public final ImageView mImageView;
+        public final ProgressBar mProgressBar;
+        public final TextView mPostContentView;
+        public final TextView mCommentsView;
 
-        public ViewHolder(ImageView img, TextView post, TextView comments) {
-            imageView = img;
-            postContentView = post;
-            commentsView = comments;
+        public ViewHolder(ImageView img, ProgressBar progress, TextView post, TextView comments) {
+            mImageView = img;
+            mProgressBar = progress;
+            mPostContentView = post;
+            mCommentsView = comments;
         }
     }
 
     protected class DownloadImageAsyncTask extends AsyncTask<URL, Integer, Bitmap> {
         private static final String TAG = "REDDITREADER.ASYNC";
         ImageView mImageView;
+        ProgressBar mProgressBar;
 
 
-        public DownloadImageAsyncTask(ImageView img) {
-            super();
+        public DownloadImageAsyncTask(ImageView img, ProgressBar progress) {
             mImageView = img;
+            mProgressBar = progress;
         }
 
+        @Override
+        public void onPreExecute(){
+            super.onPreExecute();
+            mProgressBar.setVisibility(View.VISIBLE);
+        }
 
         @Override
         protected Bitmap doInBackground(URL... urls) {
@@ -140,9 +151,9 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
 
         @Override
         protected void onPostExecute(Bitmap result) {
-            mImageView.setImageBitmap(result);
+            if(result != null)
+                mImageView.setImageBitmap(result);
+            mProgressBar.setVisibility(View.GONE);
         }
     }
-
-
 }
