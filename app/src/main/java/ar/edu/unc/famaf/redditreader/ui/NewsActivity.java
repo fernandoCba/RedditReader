@@ -14,7 +14,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import ar.edu.unc.famaf.redditreader.R;
-import ar.edu.unc.famaf.redditreader.backend.Backend;
+import ar.edu.unc.famaf.redditreader.backend.GetTopPostsTask;
 import ar.edu.unc.famaf.redditreader.model.PostModel;
 
 
@@ -28,12 +28,18 @@ public class NewsActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        List<PostModel> postModelList = Backend.getInstance().getTopPosts();
+        GetTopPostsTask topPostsTask = new GetTopPostsTask(){
+            @Override
+            protected void onPostExecute(List<PostModel> postModels) {
+                if(postModels != null){
+                    PostAdapter ad = new PostAdapter(NewsActivity.this, R.layout.fragment_news, postModels);
+                    ListView postsLV = (ListView) findViewById(R.id.postsListView);
+                    postsLV.setAdapter(ad);
+                }
+            }
+        };
 
-
-        PostAdapter ad = new PostAdapter(this, R.layout.fragment_news, postModelList);
-        ListView postsLV = (ListView) findViewById(R.id.postsListView);
-        postsLV.setAdapter(ad);
+        topPostsTask.execute();
     }
 
     @Override

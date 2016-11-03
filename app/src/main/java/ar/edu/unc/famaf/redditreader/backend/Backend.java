@@ -30,43 +30,5 @@ public class Backend {
     }
 
 
-    private PostModel parsePost(JsonObject postJson) {
-        PostModel p = new PostModel();
-        p.setAuthor(postJson.get("author").getAsString());
-        p.setCreatedOn(postJson.get("created").getAsString());
-        p.setTitle(postJson.get("title").getAsString());
-        p.setComments(postJson.get("num_comments").getAsInt());
-        JsonObject preview = postJson.getAsJsonObject("preview");
-        JsonArray images = preview.getAsJsonArray("images");
-        JsonObject arrayObject = images.get(0).getAsJsonObject();
-        JsonObject source = arrayObject.getAsJsonObject("source");
-        String url = source.get("url").getAsString();
-        p.setImageUrl(url);
-        return p;
 
-
-    }
-
-    public List<PostModel> getTopPosts() {
-        List<PostModel> list = new ArrayList<PostModel>();
-        try {
-            String jsonRaw = PerformRequest(END_POINT + "top.json");
-            JsonParser parser = new JsonParser();
-            JsonElement jElement = parser.parse(jsonRaw);
-            if (jElement.isJsonObject()) {
-                JsonObject data = jElement.getAsJsonObject().get("data").getAsJsonObject();
-                JsonArray children = data.getAsJsonObject().get("children").getAsJsonArray();
-                for (int i = 0; i < children.size(); i++) {
-                    JsonObject childrenArrayElement = children.get(i).getAsJsonObject();
-                    JsonObject childrenData = childrenArrayElement.get("data").getAsJsonObject();
-                    list.add(parsePost(childrenData));
-                }
-
-            }
-
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
-        return list;
-    }
 }
