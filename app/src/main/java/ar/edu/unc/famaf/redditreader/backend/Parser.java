@@ -28,6 +28,7 @@ public class Parser {
             sb.append(line);
         }
         GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.serializeNulls();
         gsonBuilder.registerTypeAdapter(Listing.class, new PostModelDeserializer());
         Gson gson = gsonBuilder.create();
         return gson.fromJson(sb.toString(), Listing.class);
@@ -40,7 +41,7 @@ public class Parser {
             Listing listing = new Listing();
 
             JsonObject data = json.getAsJsonObject().get("data").getAsJsonObject();
-            listing.setBefore(data.get("before").getAsString());
+            //Check Null listing.setBefore(data.get("before").getAsString());
             listing.setAfter(data.get("after").getAsString());
             JsonArray children = data.getAsJsonObject().get("children").getAsJsonArray();
             for (int i = 0; i < children.size(); i++) {
@@ -58,11 +59,14 @@ public class Parser {
             p.setTitle(postJson.get("title").getAsString());
             p.setComments(postJson.get("num_comments").getAsInt());
             JsonObject preview = postJson.getAsJsonObject("preview");
-            JsonArray images = preview.getAsJsonArray("images");
-            JsonObject arrayObject = images.get(0).getAsJsonObject();
-            JsonObject source = arrayObject.getAsJsonObject("source");
-            String url = source.get("url").getAsString();
-            p.setImageUrl(url);
+            if (preview != null) {
+                JsonArray images = preview.getAsJsonArray("images");
+                JsonObject arrayObject = images.get(0).getAsJsonObject();
+                JsonObject source = arrayObject.getAsJsonObject("source");
+                String url = source.get("url").getAsString();
+                p.setImageUrl(url);
+            }
+
             return p;
 
 

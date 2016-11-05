@@ -86,10 +86,17 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
         String s = mPostTitleAndAuthorText.replace("#TITLE#", post.getTitle()).replace("#AUTHOR#", post.getAuthor());
         postContent.setText(s);
 
-        URL[] urlArray = new URL[1];
         String imgUrl = post.getImage();
         try {
-            urlArray[0] = new URL(imgUrl);
+            URL[] urlArray = null;
+
+            if (imgUrl != null){
+                urlArray = new URL[1];
+                urlArray[0] = new URL(imgUrl);
+            }
+            else
+                urlArray = null;
+
             DownloadImageAsyncTask downloadImageAsyncTask = new DownloadImageAsyncTask(viewHolder.mImageView, viewHolder.mProgressBar);
             downloadImageAsyncTask.execute(urlArray);
         } catch (Exception e) {
@@ -129,13 +136,15 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
         }
 
         @Override
-        public void onPreExecute(){
+        public void onPreExecute() {
             super.onPreExecute();
             mProgressBar.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected Bitmap doInBackground(URL... urls) {
+            if (urls == null)
+                return null;
             URL url = urls[0];
             Bitmap bitmap = null;
             HttpURLConnection connection = null;
@@ -151,7 +160,7 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
 
         @Override
         protected void onPostExecute(Bitmap result) {
-            if(result != null)
+            if (result != null)
                 mImageView.setImageBitmap(result);
             mProgressBar.setVisibility(View.GONE);
         }
