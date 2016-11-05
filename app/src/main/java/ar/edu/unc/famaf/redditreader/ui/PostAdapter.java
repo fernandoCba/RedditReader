@@ -136,6 +136,7 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
         @Override
         public void onPreExecute() {
             super.onPreExecute();
+            mImageView.setImageResource(R.drawable.reddit_icon);
             mProgressBar.setVisibility(View.VISIBLE);
         }
 
@@ -148,6 +149,7 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
             HttpURLConnection connection = null;
             try {
                 connection = (HttpURLConnection) url.openConnection();
+                connection.setReadTimeout(3000);
                 InputStream is = connection.getInputStream();
                 bitmap = BitmapFactory.decodeStream(is, null, null);
             } catch (Exception e) {
