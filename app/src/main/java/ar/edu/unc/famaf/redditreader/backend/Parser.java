@@ -41,8 +41,15 @@ public class Parser {
             Listing listing = new Listing();
 
             JsonObject data = json.getAsJsonObject().get("data").getAsJsonObject();
-            //Check Null listing.setBefore(data.get("before").getAsString());
-            listing.setAfter(data.get("after").getAsString());
+
+            JsonElement before = data.get("before");
+            if(!before.isJsonNull())
+                listing.setBefore(before.getAsString());
+
+            JsonElement after = data.get("after");
+            if(!after.isJsonNull())
+                listing.setAfter(after.getAsString());
+
             JsonArray children = data.getAsJsonObject().get("children").getAsJsonArray();
             for (int i = 0; i < children.size(); i++) {
                 JsonObject childrenArrayElement = children.get(i).getAsJsonObject();
@@ -58,18 +65,8 @@ public class Parser {
             p.setCreatedOn(postJson.get("created").getAsString());
             p.setTitle(postJson.get("title").getAsString());
             p.setComments(postJson.get("num_comments").getAsInt());
-            JsonObject preview = postJson.getAsJsonObject("preview");
-            if (preview != null) {
-                JsonArray images = preview.getAsJsonArray("images");
-                JsonObject arrayObject = images.get(0).getAsJsonObject();
-                JsonObject source = arrayObject.getAsJsonObject("source");
-                String url = source.get("url").getAsString();
-                p.setImageUrl(url);
-            }
-
+            p.setImageUrl(postJson.get("thumbnail").getAsString());
             return p;
-
-
         }
     }
 }

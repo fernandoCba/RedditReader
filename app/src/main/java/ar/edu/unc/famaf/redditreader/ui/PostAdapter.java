@@ -88,14 +88,12 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
 
         String imgUrl = post.getImage();
         try {
-            URL[] urlArray = null;
+            URL[] urlArray = new URL[1];
 
-            if (imgUrl != null){
-                urlArray = new URL[1];
+            if (imgUrl != null)
                 urlArray[0] = new URL(imgUrl);
-            }
             else
-                urlArray = null;
+                urlArray[0]  = null;
 
             DownloadImageAsyncTask downloadImageAsyncTask = new DownloadImageAsyncTask(viewHolder.mImageView, viewHolder.mProgressBar);
             downloadImageAsyncTask.execute(urlArray);
@@ -143,9 +141,9 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
 
         @Override
         protected Bitmap doInBackground(URL... urls) {
-            if (urls == null)
-                return null;
             URL url = urls[0];
+            if (url == null)
+                return null;
             Bitmap bitmap = null;
             HttpURLConnection connection = null;
             try {
