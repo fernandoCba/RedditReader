@@ -1,8 +1,12 @@
 package ar.edu.unc.famaf.redditreader.ui;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -28,10 +32,17 @@ public class NewsActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        GetTopPostsTask topPostsTask = new GetTopPostsTask(){
+        if (!checkInternetConnection()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(getResources().getString(R.string.error_no_internet_connection));
+            builder.create().show();
+            return;
+        }
+
+        GetTopPostsTask topPostsTask = new GetTopPostsTask() {
             @Override
             protected void onPostExecute(List<PostModel> postModels) {
-                if(postModels != null){
+                if (postModels != null) {
                     PostAdapter ad = new PostAdapter(NewsActivity.this, R.layout.fragment_news, postModels);
                     ListView postsLV = (ListView) findViewById(R.id.postsListView);
                     postsLV.setAdapter(ad);
@@ -40,6 +51,14 @@ public class NewsActivity extends AppCompatActivity {
         };
 
         topPostsTask.execute();
+    }
+
+    private boolean checkInternetConnection() {
+        ConnectivityManager cm =
+                (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
     @Override

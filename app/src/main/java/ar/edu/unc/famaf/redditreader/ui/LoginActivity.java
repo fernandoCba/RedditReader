@@ -28,7 +28,7 @@ import ar.edu.unc.famaf.redditreader.R;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity  {
+public class LoginActivity extends AppCompatActivity {
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -217,9 +217,9 @@ public class LoginActivity extends AppCompatActivity  {
 
             if (success) {
                 String[] parts = mEmail.split("@");
-                Intent intent=new Intent();
-                intent.putExtra(LoginActivity.USERNAME,parts[0]);
-                setResult(Activity.RESULT_OK,intent);
+                Intent intent = new Intent();
+                intent.putExtra(LoginActivity.USERNAME, parts[0]);
+                setResult(Activity.RESULT_OK, intent);
                 finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));

@@ -21,8 +21,8 @@ public class Parser {
         Listing listing = null;
         try {
             mReader.beginObject();
-            while(mReader.hasNext()){
-                if(mReader.nextName().equalsIgnoreCase("data"))
+            while (mReader.hasNext()) {
+                if (mReader.nextName().equalsIgnoreCase("data"))
                     listing = readListing();
                 else
                     mReader.skipValue();
@@ -43,9 +43,9 @@ public class Parser {
         mReader.beginObject();
         while (mReader.hasNext()) {
             String name = mReader.nextName();
-            if (name.equalsIgnoreCase("before") && mReader.peek()!= JsonToken.NULL)
-                    listing.setBefore(mReader.nextString());
-            else if (name.equalsIgnoreCase("after") && mReader.peek()!= JsonToken.NULL)
+            if (name.equalsIgnoreCase("before") && mReader.peek() != JsonToken.NULL)
+                listing.setBefore(mReader.nextString());
+            else if (name.equalsIgnoreCase("after") && mReader.peek() != JsonToken.NULL)
                 listing.setAfter(mReader.nextString());
             else if (name.equalsIgnoreCase("children"))
                 readPostsArray(listing);
@@ -59,9 +59,9 @@ public class Parser {
 
     private void readPostsArray(Listing listing) throws IOException {
         mReader.beginArray();
-        while(mReader.hasNext()){
+        while (mReader.hasNext()) {
             mReader.beginObject();
-            while(mReader.hasNext()) {
+            while (mReader.hasNext()) {
                 String name = mReader.nextName();
                 if (name.equalsIgnoreCase("data"))
                     readPost(listing);
@@ -73,20 +73,20 @@ public class Parser {
         mReader.endArray();
     }
 
-    private void readPost(Listing listing) throws IOException{
+    private void readPost(Listing listing) throws IOException {
         PostModel p = new PostModel();
         mReader.beginObject();
-        while(mReader.hasNext()){
+        while (mReader.hasNext()) {
             String name = mReader.nextName();
-            if(name.equalsIgnoreCase("author"))
+            if (name.equalsIgnoreCase("author"))
                 p.setAuthor(mReader.nextString());
-            else if(name.equalsIgnoreCase("created"))
+            else if (name.equalsIgnoreCase("created"))
                 p.setCreatedOn(mReader.nextString());
-            else if(name.equalsIgnoreCase("title"))
+            else if (name.equalsIgnoreCase("title"))
                 p.setTitle(mReader.nextString());
-            else if(name.equalsIgnoreCase("thumbnail"))
+            else if (name.equalsIgnoreCase("thumbnail"))
                 p.setImageUrl(mReader.nextString());
-            else if(name.equalsIgnoreCase("num_comments"))
+            else if (name.equalsIgnoreCase("num_comments"))
                 p.setComments(mReader.nextInt());
             else
                 mReader.skipValue();
