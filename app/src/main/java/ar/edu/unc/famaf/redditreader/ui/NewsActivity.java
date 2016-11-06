@@ -39,7 +39,7 @@ public class NewsActivity extends AppCompatActivity {
             return;
         }
 
-        GetTopPostsTask topPostsTask = new GetTopPostsTask() {
+        GetTopPostsTask topPostsTask = new GetTopPostsTask(this) {
             @Override
             protected void onPostExecute(List<PostModel> postModels) {
                 if (postModels != null) {
