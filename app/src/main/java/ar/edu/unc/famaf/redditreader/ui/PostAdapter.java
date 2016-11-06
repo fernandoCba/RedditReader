@@ -3,6 +3,8 @@ package ar.edu.unc.famaf.redditreader.ui;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,6 +22,7 @@ import java.net.URL;
 import java.util.List;
 
 import ar.edu.unc.famaf.redditreader.R;
+import ar.edu.unc.famaf.redditreader.backend.RedditDBHelper;
 import ar.edu.unc.famaf.redditreader.model.PostModel;
 
 public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
@@ -93,9 +96,9 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
             if (imgUrl != null)
                 urlArray[0] = new URL(imgUrl);
             else
-                urlArray[0]  = null;
+                urlArray[0] = null;
 
-            DownloadImageAsyncTask downloadImageAsyncTask = new DownloadImageAsyncTask(viewHolder.mImageView, viewHolder.mProgressBar);
+            DownloadImageAsyncTask downloadImageAsyncTask = new DownloadImageAsyncTask(getContext(), viewHolder.mImageView, viewHolder.mProgressBar);
             downloadImageAsyncTask.execute(urlArray);
         } catch (Exception e) {
             e.printStackTrace();
@@ -126,11 +129,13 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
         private static final String TAG = "REDDITREADER.ASYNC";
         ImageView mImageView;
         ProgressBar mProgressBar;
+        Context mContext;
 
 
-        public DownloadImageAsyncTask(ImageView img, ProgressBar progress) {
+        public DownloadImageAsyncTask(Context context, ImageView img, ProgressBar progress) {
             mImageView = img;
             mProgressBar = progress;
+            mContext = context;
         }
 
         @Override
@@ -142,20 +147,25 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
 
         @Override
         protected Bitmap doInBackground(URL... urls) {
+            RedditDBHelper dbHelper = new RedditDBHelper(mContext);
             URL url = urls[0];
             if (url == null)
                 return null;
-            Bitmap bitmap = null;
+            Bitmap bitmap = dbHelper.getImage(url);
             HttpURLConnection connection = null;
-            try {
-                connection = (HttpURLConnection) url.openConnection();
-                connection.setReadTimeout(3000);
-                InputStream is = connection.getInputStream();
-                bitmap = BitmapFactory.decodeStream(is, null, null);
-            } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
+            if (bitmap == null && checkInternetConnection()) {
+                try {
+                    connection = (HttpURLConnection) url.openConnection();
+                    connection.setReadTimeout(3000);
+                    InputStream is = connection.getInputStream();
+                    bitmap = BitmapFactory.decodeStream(is, null, null);
+                } catch (Exception e) {
+                    Log.e(TAG, e.getMessage());
+                }
+                dbHelper.persistImage(url.toString(), bitmap);
             }
             return bitmap;
+
         }
 
         @Override
@@ -163,6 +173,14 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
             if (result != null)
                 mImageView.setImageBitmap(result);
             mProgressBar.setVisibility(View.GONE);
+        }
+
+        private boolean checkInternetConnection() {
+            ConnectivityManager cm =
+                    (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+            return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
         }
     }
 }

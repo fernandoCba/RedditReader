@@ -1,6 +1,8 @@
 package ar.edu.unc.famaf.redditreader.backend;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 
 import java.io.IOException;
@@ -21,9 +23,11 @@ public class GetTopPostsTask extends AsyncTask<Void, Integer, List<PostModel>> {
 
     @Override
     protected List<PostModel> doInBackground(Void... params) {
-        Listing listing = getTopPostsListing();
         RedditDBHelper dbHelper = new RedditDBHelper(mContext);
-        dbHelper.persistListing(listing);
+        if (checkInternetConnection()){
+            Listing listing = getTopPostsListing();
+            dbHelper.persistListing(listing);
+        }
         return dbHelper.getTopPostsFromDB();
     }
 
@@ -38,5 +42,13 @@ public class GetTopPostsTask extends AsyncTask<Void, Integer, List<PostModel>> {
             e.printStackTrace();
         }
         return l;
+    }
+
+    private boolean checkInternetConnection() {
+        ConnectivityManager cm =
+                (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 }

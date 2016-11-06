@@ -5,7 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
+import java.io.ByteArrayOutputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,37 +20,37 @@ import ar.edu.unc.famaf.redditreader.model.PostModel;
  * Created by Fernando on 5/11/2016.
  */
 
-public class RedditDBHelper extends SQLiteOpenHelper{
+public class RedditDBHelper extends SQLiteOpenHelper {
     private static final String DBName = "redditFernando.db";
-    private static final String POST_TABLE ="posts";
+    private static final String POST_TABLE = "posts";
     private static final String POST_TABLE_ID = "_id";
     private static final String POST_TABLE_AUTHOR = "author";
     private static final String POST_TABLE_TITLE = "title";
-    private static final String POST_TABLE_COMMENTS= "num_comments";
+    private static final String POST_TABLE_COMMENTS = "num_comments";
     private static final String POST_TABLE_CREATED_ON = "created_on";
     private static final String POST_TABLE_IMAGE = "image";
 
     private static final String IMAGE_TABLE = "images";
-    private static final String IMAGE_TABLE_ID = "_id";
     private static final String IMAGE_TABLE_URL = "url";
     private static final String IMAGE_TABLE_BITMAP = "data";
     private static final int ACTUAL_VERSION = 1;
 
-    private RedditDBHelper(Context context, int version){
+    private RedditDBHelper(Context context, int version) {
         super(context, DBName, null, version);
     }
 
-    public RedditDBHelper(Context context){
+    public RedditDBHelper(Context context) {
         this(context, ACTUAL_VERSION);
     }
 
     /**
      * Persists the Listing data into the data base.
      * If no listing data is not available, database is not changed.
+     *
      * @param listing
      */
     public void persistListing(Listing listing) {
-        if(listing == null)
+        if (listing == null)
             return;
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(POST_TABLE, null, null);
@@ -67,9 +71,8 @@ public class RedditDBHelper extends SQLiteOpenHelper{
         List<PostModel> list = new ArrayList<PostModel>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + POST_TABLE, null);
-        if(cursor.moveToFirst())
-        {
-            do{
+        if (cursor.moveToFirst()) {
+            do {
                 PostModel post = new PostModel();
                 post.setAuthor(cursor.getString(cursor.getColumnIndexOrThrow(POST_TABLE_AUTHOR)));
                 post.setComments(cursor.getInt(cursor.getColumnIndexOrThrow(POST_TABLE_COMMENTS)));
@@ -77,7 +80,7 @@ public class RedditDBHelper extends SQLiteOpenHelper{
                 post.setImageUrl(cursor.getString(cursor.getColumnIndexOrThrow(POST_TABLE_IMAGE)));
                 post.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(POST_TABLE_TITLE)));
                 list.add(post);
-            }while(cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
 
         return list;
@@ -86,17 +89,16 @@ public class RedditDBHelper extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase db) {
         String createImageTableQuery = "CREATE TABLE `" + IMAGE_TABLE + "` ("
-            + "`" + IMAGE_TABLE_ID+ "`	INTEGER PRIMARY KEY AUTOINCREMENT,"
-        + "`" + IMAGE_TABLE_URL + "`	TEXT NOT NULL,"
-        + "`" + IMAGE_TABLE_BITMAP+ "` BLOB NOT NULL"
-        + ");";
+                + "`" + IMAGE_TABLE_URL + "`	TEXT PRIMARY KEY,"
+                + "`" + IMAGE_TABLE_BITMAP + "` BLOB NOT NULL"
+                + ");";
         String createPostTableQuery = "CREATE TABLE `" + POST_TABLE + "` ("
                 + "`" + POST_TABLE_ID + "`	INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + "`" + POST_TABLE_TITLE + "`	TEXT NOT NULL,"
                 + "`" + POST_TABLE_AUTHOR + "`	TEXT NOT NULL,"
                 + "`" + POST_TABLE_CREATED_ON + "` TEXT NOT NULL,"
                 + "`" + POST_TABLE_COMMENTS + "` INTEGER NOT NULL,"
-                + "`" + POST_TABLE_IMAGE+ "` TEXT"
+                + "`" + POST_TABLE_IMAGE + "` TEXT"
                 + ");";
 
         db.execSQL(createImageTableQuery);
@@ -108,5 +110,36 @@ public class RedditDBHelper extends SQLiteOpenHelper{
         db.execSQL("DROP TABLE IF EXISTS " + POST_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + IMAGE_TABLE);
         this.onCreate(db);
+    }
+
+    public void persistImage(String s, Bitmap bitmap) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
+        values.put(IMAGE_TABLE_BITMAP, stream.toByteArray());
+        values.put(IMAGE_TABLE_URL, s);
+        db.insertWithOnConflict(IMAGE_TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+    }
+
+    public Bitmap getImage(URL url) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Bitmap bitmap = null;
+        Cursor cursor = db.query(
+                IMAGE_TABLE,         //tabla a consultar (FROM)
+                new String[]{IMAGE_TABLE_BITMAP},       //columnas a devolver (SELECT)
+                IMAGE_TABLE_URL + " = ?",       //consulta (WHERE)
+                new String[]{url.toString()},
+                null,
+                null,
+                null,
+                null
+        );
+        if (cursor.moveToFirst()) {
+            byte[] rawImage = cursor.getBlob(cursor.getColumnIndexOrThrow(IMAGE_TABLE_BITMAP));
+            bitmap = BitmapFactory.decodeByteArray(rawImage, 0, rawImage.length);
+        }
+        return bitmap;
+
     }
 }
