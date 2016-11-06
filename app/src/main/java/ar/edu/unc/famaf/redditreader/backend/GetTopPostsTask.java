@@ -13,6 +13,7 @@ import java.util.List;
 
 import ar.edu.unc.famaf.redditreader.model.Listing;
 import ar.edu.unc.famaf.redditreader.model.PostModel;
+import ar.edu.unc.famaf.redditreader.utils.Utils;
 
 public class GetTopPostsTask extends AsyncTask<Void, Integer, List<PostModel>> {
     private Context mContext;
@@ -24,7 +25,7 @@ public class GetTopPostsTask extends AsyncTask<Void, Integer, List<PostModel>> {
     @Override
     protected List<PostModel> doInBackground(Void... params) {
         RedditDBHelper dbHelper = new RedditDBHelper(mContext);
-        if (checkInternetConnection()){
+        if (new Utils(mContext).checkInternetConnection()){
             Listing listing = getTopPostsListing();
             dbHelper.persistListing(listing);
         }
@@ -42,13 +43,5 @@ public class GetTopPostsTask extends AsyncTask<Void, Integer, List<PostModel>> {
             e.printStackTrace();
         }
         return l;
-    }
-
-    private boolean checkInternetConnection() {
-        ConnectivityManager cm =
-                (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 }

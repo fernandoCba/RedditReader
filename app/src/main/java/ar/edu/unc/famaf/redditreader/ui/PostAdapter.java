@@ -3,8 +3,6 @@ package ar.edu.unc.famaf.redditreader.ui;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,6 +22,7 @@ import java.util.List;
 import ar.edu.unc.famaf.redditreader.R;
 import ar.edu.unc.famaf.redditreader.backend.RedditDBHelper;
 import ar.edu.unc.famaf.redditreader.model.PostModel;
+import ar.edu.unc.famaf.redditreader.utils.Utils;
 
 public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
     private final String mPostTitleAndAuthorText;
@@ -153,7 +152,7 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
                 return null;
             Bitmap bitmap = dbHelper.getImage(url);
             HttpURLConnection connection = null;
-            if (bitmap == null && checkInternetConnection()) {
+            if (bitmap == null && new Utils(mContext).checkInternetConnection()) {
                 try {
                     connection = (HttpURLConnection) url.openConnection();
                     connection.setReadTimeout(3000);
@@ -173,14 +172,6 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
             if (result != null)
                 mImageView.setImageBitmap(result);
             mProgressBar.setVisibility(View.GONE);
-        }
-
-        private boolean checkInternetConnection() {
-            ConnectivityManager cm =
-                    (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-            return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
         }
     }
 }
