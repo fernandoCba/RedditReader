@@ -8,14 +8,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.List;
-
 import ar.edu.unc.famaf.redditreader.R;
-import ar.edu.unc.famaf.redditreader.backend.GetTopPostsTask;
-import ar.edu.unc.famaf.redditreader.model.PostModel;
 
 
 public class NewsActivity extends AppCompatActivity {
@@ -27,19 +22,6 @@ public class NewsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_news);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        GetTopPostsTask topPostsTask = new GetTopPostsTask(this) {
-            @Override
-            protected void onPostExecute(List<PostModel> postModels) {
-                if (postModels != null) {
-                    PostAdapter ad = new PostAdapter(NewsActivity.this, R.layout.fragment_news, postModels);
-                    ListView postsLV = (ListView) findViewById(R.id.postsListView);
-                    postsLV.setAdapter(ad);
-                }
-            }
-        };
-
-        topPostsTask.execute();
     }
 
 
@@ -57,10 +39,7 @@ public class NewsActivity extends AppCompatActivity {
         if (id == R.id.action_sign_in) {
             Intent newIntent = new Intent(this, LoginActivity.class);
             startActivityForResult(newIntent, LOGIN_REQUEST);
-            //NewsActivityFragment newsfragment = (NewsActivityFragment)
-            //        getSupportFragmentManager().findFragmentById(R.id.news_activity_fragment_id);
-            //TextView textView = (TextView) findViewById(R.id.loginStatusTextView);
-            //textView.setText("User XXXX logged in");
+
             return true;
         }
 
