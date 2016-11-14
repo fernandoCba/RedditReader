@@ -10,15 +10,19 @@ import android.widget.ListView;
 import java.util.List;
 
 import ar.edu.unc.famaf.redditreader.R;
+import ar.edu.unc.famaf.redditreader.backend.Backend;
+import ar.edu.unc.famaf.redditreader.backend.EndlessScrollListener;
 import ar.edu.unc.famaf.redditreader.backend.GetTopPostsTask;
+import ar.edu.unc.famaf.redditreader.backend.PostsIteratorListener;
 import ar.edu.unc.famaf.redditreader.model.PostModel;
 
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class NewsActivityFragment extends Fragment {
-
+public class NewsActivityFragment extends Fragment implements PostsIteratorListener
+{
+    private PostAdapter mPostAdapter;
     public NewsActivityFragment() {
     }
 
@@ -45,4 +49,19 @@ public class NewsActivityFragment extends Fragment {
         topPostsTask.execute();
     }
 
+    @Override
+    public void nextPosts(List<PostModel> posts) {
+        if(posts == null)
+            return;
+
+        if (mPostAdapter == null) {
+            PostAdapter ad = new PostAdapter(getActivity(), R.layout.fragment_news, posts);
+            ListView postsLV = (ListView) getActivity().findViewById(R.id.postsListView);
+            postsLV.setAdapter(ad);
+        }
+        else{
+            mPostAdapter.addAll(posts);
+            mPostAdapter.notifyDataSetChanged();
+        }
+    }
 }
