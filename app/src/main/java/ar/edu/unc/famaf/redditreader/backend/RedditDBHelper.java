@@ -126,9 +126,9 @@ public class RedditDBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Bitmap bitmap = null;
         Cursor cursor = db.query(
-                IMAGE_TABLE,         //tabla a consultar (FROM)
-                new String[]{IMAGE_TABLE_BITMAP},       //columnas a devolver (SELECT)
-                IMAGE_TABLE_URL + " = ?",       //consulta (WHERE)
+                IMAGE_TABLE,
+                new String[]{IMAGE_TABLE_BITMAP},
+                IMAGE_TABLE_URL + " = ?",
                 new String[]{url.toString()},
                 null,
                 null,

@@ -2,6 +2,7 @@ package ar.edu.unc.famaf.redditreader.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,18 +36,18 @@ public class NewsActivityFragment extends Fragment implements PostsIteratorListe
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        GetTopPostsTask topPostsTask = new GetTopPostsTask(getActivity()) {
+       Backend.getInstance().getNextPosts(this);
+        ListView listView = (ListView) getActivity().findViewById(R.id.postsListView);
+        listView.setOnScrollListener(new EndlessScrollListener() {
             @Override
-            protected void onPostExecute(List<PostModel> postModels) {
-                if (postModels != null) {
-                    PostAdapter ad = new PostAdapter(getActivity(), R.layout.fragment_news, postModels);
-                    ListView postsLV = (ListView) getActivity().findViewById(R.id.postsListView);
-                    postsLV.setAdapter(ad);
-                }
+            public boolean onLoadMore(int page, int totalItemsCount) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to your AdapterView
+                Backend.getInstance().getNextPosts(NewsActivityFragment.this);
+                // or loadNextDataFromApi(totalItemsCount);
+                return true; // ONLY if more data is actually being loaded; false otherwise.
             }
-        };
-
-        topPostsTask.execute();
+        });
     }
 
     @Override
@@ -55,9 +56,9 @@ public class NewsActivityFragment extends Fragment implements PostsIteratorListe
             return;
 
         if (mPostAdapter == null) {
-            PostAdapter ad = new PostAdapter(getActivity(), R.layout.fragment_news, posts);
+            mPostAdapter = new PostAdapter(getActivity(), R.layout.fragment_news, posts);
             ListView postsLV = (ListView) getActivity().findViewById(R.id.postsListView);
-            postsLV.setAdapter(ad);
+            postsLV.setAdapter(mPostAdapter);
         }
         else{
             mPostAdapter.addAll(posts);

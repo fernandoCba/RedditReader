@@ -56,6 +56,7 @@ public class GetTopPostsTask extends AsyncTask<Void, Integer, Listing> {
         }
         count += LIMIT;
         after = l.getAfter();
+        l.setCount(count);
         return l;
     }
 
