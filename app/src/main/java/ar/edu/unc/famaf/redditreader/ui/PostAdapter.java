@@ -75,7 +75,8 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
                     (ImageView) convertView.findViewById(R.id.news_icon),
                     (ProgressBar) convertView.findViewById(R.id.progressBarNewsIcon),
                     (TextView) convertView.findViewById(R.id.news_content),
-                    (TextView) convertView.findViewById(R.id.number_comments)
+                    (TextView) convertView.findViewById(R.id.number_comments),
+                    (TextView) convertView.findViewById(R.id.timespanContent)
             );
             convertView.setTag(viewHolder);
         } else {
@@ -107,6 +108,9 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
         s = mCommentsText.replace("#COMMENTS#", "" + post.getComments());
         comments.setText(s);
 
+        TextView created = viewHolder.mCreatedOnView;
+        created.setText(post.getCreatedOn());
+
         return convertView;
     }
 
@@ -115,12 +119,14 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
         public final ProgressBar mProgressBar;
         public final TextView mPostContentView;
         public final TextView mCommentsView;
+        public final TextView mCreatedOnView;
 
-        public ViewHolder(ImageView img, ProgressBar progress, TextView post, TextView comments) {
+        public ViewHolder(ImageView img, ProgressBar progress, TextView post, TextView comments, TextView createdOn) {
             mImageView = img;
             mProgressBar = progress;
             mPostContentView = post;
             mCommentsView = comments;
+            mCreatedOnView = createdOn;
         }
     }
 
