@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 
 import ar.edu.unc.famaf.redditreader.R;
@@ -109,9 +111,15 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
         comments.setText(s);
 
         TextView created = viewHolder.mCreatedOnView;
-        created.setText(post.getCreatedOn());
+        created.setText(getElapsedTime(post.getCreatedOn()));
 
         return convertView;
+    }
+
+    private String getElapsedTime(long createdOn){
+        CharSequence elapsed = DateUtils.getRelativeTimeSpanString (createdOn * 1000, new Date().getTime(), DateUtils.HOUR_IN_MILLIS, 0);
+        return elapsed.toString();
+
     }
 
     private class ViewHolder {

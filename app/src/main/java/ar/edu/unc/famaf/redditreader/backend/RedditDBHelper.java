@@ -76,7 +76,7 @@ public class RedditDBHelper extends SQLiteOpenHelper {
                 PostModel post = new PostModel();
                 post.setAuthor(cursor.getString(cursor.getColumnIndexOrThrow(POST_TABLE_AUTHOR)));
                 post.setComments(cursor.getInt(cursor.getColumnIndexOrThrow(POST_TABLE_COMMENTS)));
-                post.setCreatedOn(cursor.getString(cursor.getColumnIndexOrThrow(POST_TABLE_CREATED_ON)));
+                post.setCreatedOn(cursor.getLong(cursor.getColumnIndexOrThrow(POST_TABLE_CREATED_ON)));
                 post.setImageUrl(cursor.getString(cursor.getColumnIndexOrThrow(POST_TABLE_IMAGE)));
                 post.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(POST_TABLE_TITLE)));
                 list.add(post);

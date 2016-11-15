@@ -6,7 +6,7 @@ import java.util.Date;
 public class PostModel {
     private String mTitle;
     private String mAuthor;
-    private String mCreatedOn;
+    private long mCreatedOn;
     private int mComments;
     private String mImage;
 
@@ -26,11 +26,11 @@ public class PostModel {
         this.mAuthor = mAuthor;
     }
 
-    public String getCreatedOn() {
+    public long getCreatedOn() {
         return mCreatedOn;
     }
 
-    public void setCreatedOn(String mCreatedOn) {
+    public void setCreatedOn(long mCreatedOn) {
         this.mCreatedOn = mCreatedOn;
     }
 
