@@ -1,8 +1,6 @@
 package ar.edu.unc.famaf.redditreader.model;
 
 
-import java.util.Date;
-
 public class PostModel {
     private String mTitle;
     private String mAuthor;

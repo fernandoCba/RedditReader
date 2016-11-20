@@ -43,9 +43,7 @@ public class Parser {
         mReader.beginObject();
         while (mReader.hasNext()) {
             String name = mReader.nextName();
-            if (name.equalsIgnoreCase("before") && mReader.peek() != JsonToken.NULL)
-                listing.setBefore(mReader.nextString());
-            else if (name.equalsIgnoreCase("after") && mReader.peek() != JsonToken.NULL)
+            if (name.equalsIgnoreCase("after") && mReader.peek() != JsonToken.NULL)
                 listing.setAfter(mReader.nextString());
             else if (name.equalsIgnoreCase("children"))
                 readPostsArray(listing);

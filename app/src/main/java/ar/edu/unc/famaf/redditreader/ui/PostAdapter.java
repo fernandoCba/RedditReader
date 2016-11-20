@@ -65,7 +65,7 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
 
     @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -100,7 +100,15 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
             else
                 urlArray[0] = null;
 
-            DownloadImageAsyncTask downloadImageAsyncTask = new DownloadImageAsyncTask(getContext(), viewHolder.mImageView, viewHolder.mProgressBar);
+            DownloadImageAsyncTask downloadImageAsyncTask = new DownloadImageAsyncTask(getContext(),
+                    viewHolder.mImageView, viewHolder.mProgressBar, position){
+                @Override
+                protected void onPostExecute(Bitmap result) {
+                    if (result != null && getPosition() == position)
+                        mImageView.setImageBitmap(result);
+                    mProgressBar.setVisibility(View.GONE);
+                }
+            };
             downloadImageAsyncTask.execute(urlArray);
         } catch (Exception e) {
             e.printStackTrace();
@@ -143,12 +151,18 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
         ImageView mImageView;
         ProgressBar mProgressBar;
         Context mContext;
+        private int mPosition;
 
+        public int getPosition()
+        {
+            return mPosition;
+        }
 
-        public DownloadImageAsyncTask(Context context, ImageView img, ProgressBar progress) {
+        public DownloadImageAsyncTask(Context context, ImageView img, ProgressBar progress, int position) {
             mImageView = img;
             mProgressBar = progress;
             mContext = context;
+            mPosition = position;
         }
 
         @Override
@@ -179,13 +193,6 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
             }
             return bitmap;
 
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap result) {
-            if (result != null)
-                mImageView.setImageBitmap(result);
-            mProgressBar.setVisibility(View.GONE);
         }
     }
 }

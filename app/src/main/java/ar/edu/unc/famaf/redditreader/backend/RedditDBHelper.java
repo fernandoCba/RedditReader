@@ -67,10 +67,10 @@ public class RedditDBHelper extends SQLiteOpenHelper {
 
     }
 
-    public List<PostModel> getTopPostsFromDB() {
+    public List<PostModel> getTopPostsFromDB(int limit, int offset) {
         List<PostModel> list = new ArrayList<PostModel>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + POST_TABLE, null);
+        Cursor cursor = db.rawQuery(String.format("SELECT * FROM %s limit %d offset %d", POST_TABLE, limit, offset), null);
         if (cursor.moveToFirst()) {
             do {
                 PostModel post = new PostModel();
