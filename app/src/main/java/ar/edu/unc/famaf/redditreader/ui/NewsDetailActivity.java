@@ -12,5 +12,10 @@ public class NewsDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_detail);
         String title = getIntent().getStringExtra(NewsActivity.EXTRA_POST_MODEL);
+        NewsDetailActivityFragment detailsFrag = (NewsDetailActivityFragment)
+                getSupportFragmentManager().findFragmentById(R.id.news_detail_fragment);
+        detailsFrag.updateTitle(title);
+
+
     }
 }

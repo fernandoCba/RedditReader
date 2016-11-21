@@ -69,8 +69,8 @@ public class NewsActivityFragment extends Fragment implements PostsIteratorListe
             postsLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                                @Override
                                                public void onItemClick(AdapterView<?> adapter, View view, int position, long arg) {
-                                                   // TODO Auto-generated method stub
-                                                   Log.i("tag", "hola");
+                                                   PostModel post = mPostAdapter.getItem(position);
+                                                   mCallback.onPostItemPicked(post);
                                                }
                                            }
             );

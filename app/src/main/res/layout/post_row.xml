@@ -64,7 +64,7 @@
         android:text="@string/post_title_and_author"
         android:textSize="@dimen/news_content" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/comments_icon"
         android:layout_width="35dp"
         android:layout_height="35dp"
@@ -83,7 +83,7 @@
         android:text="@string/post_comments"
         android:textSize="@dimen/news_upper_content" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/next_content_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
