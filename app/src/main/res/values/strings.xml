@@ -18,6 +18,4 @@
     <string name="post_comments">#COMMENTS# comment(s).</string>
     <string name="title_activity_news">@string/app_name</string>
     <string name="error_no_internet_connection">No Internet Connection</string>
-
-
 </resources>

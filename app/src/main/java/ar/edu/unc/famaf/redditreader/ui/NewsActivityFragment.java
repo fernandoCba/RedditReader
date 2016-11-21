@@ -1,11 +1,13 @@
 package ar.edu.unc.famaf.redditreader.ui;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.List;
@@ -21,9 +23,10 @@ import ar.edu.unc.famaf.redditreader.model.PostModel;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class NewsActivityFragment extends Fragment implements PostsIteratorListener
-{
+public class NewsActivityFragment extends Fragment implements PostsIteratorListener {
+    OnItemClickListener mCallback;
     private PostAdapter mPostAdapter;
+
     public NewsActivityFragment() {
     }
 
@@ -36,31 +39,42 @@ public class NewsActivityFragment extends Fragment implements PostsIteratorListe
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-       Backend.getInstance().getNextPosts(this);
+        Backend.getInstance().getNextPosts(this);
         ListView listView = (ListView) getActivity().findViewById(R.id.postsListView);
         listView.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public boolean onLoadMore(int page, int totalItemsCount) {
-                // Triggered only when new data needs to be appended to the list
-                // Add whatever code is needed to append new items to your AdapterView
                 Backend.getInstance().getNextPosts(NewsActivityFragment.this);
-                // or loadNextDataFromApi(totalItemsCount);
-                return true; // ONLY if more data is actually being loaded; false otherwise.
+                return true;
             }
         });
+
+        try {
+            mCallback = (OnItemClickListener) getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException(getActivity().toString()
+                    + " must implement OnHeadlineSelectedListener");
+        }
     }
 
     @Override
     public void nextPosts(List<PostModel> posts) {
-        if(posts == null)
+        if (posts == null)
             return;
 
         if (mPostAdapter == null) {
             mPostAdapter = new PostAdapter(getActivity(), R.layout.fragment_news, posts);
             ListView postsLV = (ListView) getActivity().findViewById(R.id.postsListView);
             postsLV.setAdapter(mPostAdapter);
-        }
-        else{
+            postsLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                               @Override
+                                               public void onItemClick(AdapterView<?> adapter, View view, int position, long arg) {
+                                                   // TODO Auto-generated method stub
+                                                   Log.i("tag", "hola");
+                                               }
+                                           }
+            );
+        } else {
             mPostAdapter.addAll(posts);
             mPostAdapter.notifyDataSetChanged();
         }

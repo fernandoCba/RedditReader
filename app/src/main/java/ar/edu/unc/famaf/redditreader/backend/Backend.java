@@ -24,29 +24,33 @@ public class Backend {
 
     public void getNextPosts(final PostsIteratorListener listener) {
         final RedditDBHelper dbHelper = new RedditDBHelper(listener.getContext());
-        if (mItemsRead <= dbItemsRead && new Utils(listener.getContext()).checkInternetConnection()) {
-            GetTopPostsTask topPostsTask = new GetTopPostsTask(mLastListing, ITEMS_TO_READ) {
-                @Override
-                protected void onPostExecute(Listing listing) {
-                    super.onPostExecute(listing);
-                    if (listing != null) {
-                        mLastListing = listing;
-                        dbHelper.persistListing(listing);
-                        mItemsRead = listing.getPosts().size();
-                        dbItemsRead = 0;
-                        returnNextFives(listener, dbHelper);
+
+        try {
+            if (mItemsRead <= dbItemsRead && new Utils(listener.getContext()).checkInternetConnection()) {
+                GetTopPostsTask topPostsTask = new GetTopPostsTask(mLastListing, ITEMS_TO_READ) {
+                    @Override
+                    protected void onPostExecute(Listing listing) {
+                        super.onPostExecute(listing);
+                        if (listing != null) {
+                            mLastListing = listing;
+                            dbHelper.persistListing(listing);
+                            mItemsRead = listing.getPosts().size();
+                            dbItemsRead = 0;
+                            returnNextFives(listener, dbHelper);
+                        }
                     }
-                }
-            };
+                };
 
-            topPostsTask.execute();
-        } else
-            returnNextFives(listener, dbHelper);
-
+                topPostsTask.execute();
+            } else
+                returnNextFives(listener, dbHelper);
+        } finally {
+            dbHelper.close();
+        }
     }
 
     private void returnNextFives(final PostsIteratorListener listener, RedditDBHelper dbHelper) {
-        List<PostModel> list = dbHelper.getTopPostsFromDB(SCROLLING_PAGE_SIZE,dbItemsRead);
+        List<PostModel> list = dbHelper.getTopPostsFromDB(SCROLLING_PAGE_SIZE, dbItemsRead);
         listener.nextPosts(list);
         dbItemsRead += list.size();
 

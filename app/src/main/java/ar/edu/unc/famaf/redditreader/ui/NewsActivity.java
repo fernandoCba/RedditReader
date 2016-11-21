@@ -11,9 +11,11 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import ar.edu.unc.famaf.redditreader.R;
+import ar.edu.unc.famaf.redditreader.model.PostModel;
 
 
-public class NewsActivity extends AppCompatActivity {
+public class NewsActivity extends AppCompatActivity implements OnItemClickListener{
+    public static String EXTRA_POST_MODEL = "REDDITREADER.UI.POSTMODEL";
     static final int LOGIN_REQUEST = 1000;
 
     @Override
@@ -61,5 +63,12 @@ public class NewsActivity extends AppCompatActivity {
             } else
                 textView.setText("User is not logged in");
         }
+    }
+
+    @Override
+    public void onPostItemPicked(PostModel post) {
+        Intent intent = new Intent(this, NewsDetailActivity.class);
+        intent.putExtra(EXTRA_POST_MODEL, post.getTitle());
+        startActivity(intent);
     }
 }
