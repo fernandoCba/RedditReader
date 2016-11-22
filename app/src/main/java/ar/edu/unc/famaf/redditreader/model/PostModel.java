@@ -1,7 +1,9 @@
 package ar.edu.unc.famaf.redditreader.model;
 
 
-public class PostModel {
+import java.io.Serializable;
+
+public class PostModel implements Serializable {
     private String mTitle;
     private String mAuthor;
     private long mCreatedOn;
@@ -39,11 +41,13 @@ public class PostModel {
     public void setComments(int mComments) {
         this.mComments = mComments;
     }
+
     public String getImage() {
         return mImage;
     }
 
     public void setImageUrl(String mImageUrl) {
-        this.mImage = mImageUrl;
+        if (mImageUrl != null && mImageUrl.contains("http"))
+            this.mImage = mImageUrl;
     }
 }
