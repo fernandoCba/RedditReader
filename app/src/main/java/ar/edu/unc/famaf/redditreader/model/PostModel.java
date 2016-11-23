@@ -1,7 +1,10 @@
 package ar.edu.unc.famaf.redditreader.model;
 
 
+import android.text.format.DateUtils;
+
 import java.io.Serializable;
+import java.util.Date;
 
 public class PostModel implements Serializable {
     private String mTitle;
@@ -9,6 +12,15 @@ public class PostModel implements Serializable {
     private long mCreatedOn;
     private int mComments;
     private String mImage;
+    private String mSubreddit;
+
+    public String getSubreddit() {
+        return mSubreddit;
+    }
+
+    public void setSubreddit(String subreddit) {
+        this.mSubreddit = subreddit;
+    }
 
     public String getTitle() {
         return mTitle;
@@ -49,5 +61,10 @@ public class PostModel implements Serializable {
     public void setImageUrl(String mImageUrl) {
         if (mImageUrl != null && mImageUrl.contains("http"))
             this.mImage = mImageUrl;
+    }
+
+    public String getElapsedTime(){
+        CharSequence elapsed = DateUtils.getRelativeTimeSpanString (mCreatedOn * 1000, new Date().getTime(), DateUtils.HOUR_IN_MILLIS, 0);
+        return elapsed.toString();
     }
 }

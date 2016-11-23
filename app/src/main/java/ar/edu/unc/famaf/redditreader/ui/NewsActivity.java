@@ -68,7 +68,7 @@ public class NewsActivity extends AppCompatActivity implements OnItemClickListen
     @Override
     public void onPostItemPicked(PostModel post) {
         Intent intent = new Intent(this, NewsDetailActivity.class);
-        intent.putExtra(EXTRA_POST_MODEL, post.getTitle());
+        intent.putExtra(EXTRA_POST_MODEL, post);
         startActivity(intent);
     }
 }

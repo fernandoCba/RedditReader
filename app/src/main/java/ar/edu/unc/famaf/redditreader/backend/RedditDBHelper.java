@@ -29,6 +29,7 @@ public class RedditDBHelper extends SQLiteOpenHelper {
     private static final String POST_TABLE_COMMENTS = "num_comments";
     private static final String POST_TABLE_CREATED_ON = "created_on";
     private static final String POST_TABLE_IMAGE = "image";
+    private static final String POST_TABLE_SUBREDDIT = "subreddit";
 
     private static final String IMAGE_TABLE = "images";
     private static final String IMAGE_TABLE_URL = "url";
@@ -62,6 +63,7 @@ public class RedditDBHelper extends SQLiteOpenHelper {
             values.put(POST_TABLE_CREATED_ON, p.getCreatedOn());
             values.put(POST_TABLE_IMAGE, p.getImage());
             values.put(POST_TABLE_TITLE, p.getTitle());
+            values.put(POST_TABLE_SUBREDDIT, p.getSubreddit());
             db.insert(POST_TABLE, null, values);
         }
 
@@ -79,6 +81,7 @@ public class RedditDBHelper extends SQLiteOpenHelper {
                 post.setCreatedOn(cursor.getLong(cursor.getColumnIndexOrThrow(POST_TABLE_CREATED_ON)));
                 post.setImageUrl(cursor.getString(cursor.getColumnIndexOrThrow(POST_TABLE_IMAGE)));
                 post.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(POST_TABLE_TITLE)));
+                post.setSubreddit(cursor.getString(cursor.getColumnIndexOrThrow(POST_TABLE_SUBREDDIT)));
                 list.add(post);
             } while (cursor.moveToNext());
         }
@@ -98,6 +101,7 @@ public class RedditDBHelper extends SQLiteOpenHelper {
                 + "`" + POST_TABLE_AUTHOR + "`	TEXT NOT NULL,"
                 + "`" + POST_TABLE_CREATED_ON + "` TEXT NOT NULL,"
                 + "`" + POST_TABLE_COMMENTS + "` INTEGER NOT NULL,"
+                + "`" + POST_TABLE_SUBREDDIT + "` TEXT NOT NULL,"
                 + "`" + POST_TABLE_IMAGE + "` TEXT"
                 + ");";
 

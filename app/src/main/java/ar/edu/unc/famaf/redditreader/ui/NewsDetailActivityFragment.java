@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import ar.edu.unc.famaf.redditreader.R;
+import ar.edu.unc.famaf.redditreader.model.PostModel;
 
 
 /**
@@ -29,9 +30,19 @@ public class NewsDetailActivityFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_news_detail_activity, container, false);
     }
 
-    public void updateTitle(String title){
-        TextView text = (TextView) getView().findViewById(R.id.news_detail_title);
-        text.setText(title);
+    public void updateContent(PostModel post) {
+        TextView subreddit = (TextView) getView().findViewById(R.id.details_subreddit);
+        subreddit.setText("/r/" + post.getSubreddit());
+
+        TextView title = (TextView) getView().findViewById(R.id.details_title);
+        title.setText(post.getTitle());
+
+        TextView author = (TextView) getView().findViewById(R.id.details_author);
+        author.setText(post.getAuthor());
+
+        TextView created = (TextView) getView().findViewById(R.id.details_date);
+        created.setText(post.getElapsedTime());
+
     }
 
 }

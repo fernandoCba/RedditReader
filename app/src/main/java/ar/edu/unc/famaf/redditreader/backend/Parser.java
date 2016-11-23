@@ -86,6 +86,8 @@ public class Parser {
                 p.setImageUrl(mReader.nextString());
             else if (name.equalsIgnoreCase("num_comments"))
                 p.setComments(mReader.nextInt());
+            else if (name.equalsIgnoreCase("subreddit"))
+                p.setSubreddit(mReader.nextString());
             else
                 mReader.skipValue();
         }

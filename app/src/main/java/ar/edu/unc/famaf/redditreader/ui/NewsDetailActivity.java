@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import ar.edu.unc.famaf.redditreader.R;
+import ar.edu.unc.famaf.redditreader.model.PostModel;
 
 public class NewsDetailActivity extends AppCompatActivity {
 
@@ -11,10 +12,10 @@ public class NewsDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_detail);
-        String title = getIntent().getStringExtra(NewsActivity.EXTRA_POST_MODEL);
+        PostModel post = (PostModel) getIntent().getSerializableExtra(NewsActivity.EXTRA_POST_MODEL);
         NewsDetailActivityFragment detailsFrag = (NewsDetailActivityFragment)
                 getSupportFragmentManager().findFragmentById(R.id.news_detail_fragment);
-        detailsFrag.updateTitle(title);
+        detailsFrag.updateContent(post);
 
 
     }

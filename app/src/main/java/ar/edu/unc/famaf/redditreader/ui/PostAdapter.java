@@ -78,7 +78,8 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
                     (ProgressBar) convertView.findViewById(R.id.progressBarNewsIcon),
                     (TextView) convertView.findViewById(R.id.news_content),
                     (TextView) convertView.findViewById(R.id.number_comments),
-                    (TextView) convertView.findViewById(R.id.timespanContent)
+                    (TextView) convertView.findViewById(R.id.timespanContent),
+                    (TextView) convertView.findViewById(R.id.reddit_channel)
             );
             convertView.setTag(viewHolder);
         } else {
@@ -119,15 +120,12 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
         comments.setText(s);
 
         TextView created = viewHolder.mCreatedOnView;
-        created.setText(getElapsedTime(post.getCreatedOn()));
+        created.setText(post.getElapsedTime());
+
+        TextView subreddit = viewHolder.mSubreddit;
+        subreddit.setText("/r/" + post.getSubreddit());
 
         return convertView;
-    }
-
-    private String getElapsedTime(long createdOn){
-        CharSequence elapsed = DateUtils.getRelativeTimeSpanString (createdOn * 1000, new Date().getTime(), DateUtils.HOUR_IN_MILLIS, 0);
-        return elapsed.toString();
-
     }
 
     private class ViewHolder {
@@ -136,13 +134,16 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
         public final TextView mPostContentView;
         public final TextView mCommentsView;
         public final TextView mCreatedOnView;
+        public final TextView mSubreddit;
 
-        public ViewHolder(ImageView img, ProgressBar progress, TextView post, TextView comments, TextView createdOn) {
+        public ViewHolder(ImageView img, ProgressBar progress, TextView post, TextView comments,
+                          TextView createdOn, TextView subreddit) {
             mImageView = img;
             mProgressBar = progress;
             mPostContentView = post;
             mCommentsView = comments;
             mCreatedOnView = createdOn;
+            mSubreddit = subreddit;
         }
     }
 
