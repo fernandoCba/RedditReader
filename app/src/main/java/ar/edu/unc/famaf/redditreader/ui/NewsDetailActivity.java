@@ -7,7 +7,7 @@ import ar.edu.unc.famaf.redditreader.R;
 import ar.edu.unc.famaf.redditreader.model.PostModel;
 
 public class NewsDetailActivity extends AppCompatActivity {
-
+    public static final String EXTRA_POST_MODEL = "ar.edu.unc.famaf.redditreader.ui.POST";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -16,7 +16,5 @@ public class NewsDetailActivity extends AppCompatActivity {
         NewsDetailActivityFragment detailsFrag = (NewsDetailActivityFragment)
                 getSupportFragmentManager().findFragmentById(R.id.news_detail_fragment);
         detailsFrag.updateContent(post);
-
-
     }
 }

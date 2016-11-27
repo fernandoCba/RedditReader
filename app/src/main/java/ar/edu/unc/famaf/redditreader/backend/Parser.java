@@ -88,6 +88,8 @@ public class Parser {
                 p.setComments(mReader.nextInt());
             else if (name.equalsIgnoreCase("subreddit"))
                 p.setSubreddit(mReader.nextString());
+            else if (name.equalsIgnoreCase("url"))
+                p.setUrl(mReader.nextString());
             else if (name.equalsIgnoreCase("preview"))
                 readPreview(p);
             else

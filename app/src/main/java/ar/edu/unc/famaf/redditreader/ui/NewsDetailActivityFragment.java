@@ -1,6 +1,7 @@
 package ar.edu.unc.famaf.redditreader.ui;
 
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -36,7 +38,7 @@ public class NewsDetailActivityFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_news_detail_activity, container, false);
     }
 
-    public void updateContent(PostModel post) {
+    public void updateContent(final PostModel post) {
         TextView subreddit = (TextView) getView().findViewById(R.id.details_subreddit);
         subreddit.setText("/r/" + post.getSubreddit());
 
@@ -48,6 +50,14 @@ public class NewsDetailActivityFragment extends Fragment {
 
         TextView created = (TextView) getView().findViewById(R.id.details_date);
         created.setText(post.getElapsedTime());
+
+        Button url = (Button) getView().findViewById(R.id.details_url);
+        url.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showUrl(post);
+            }
+        });
 
         if (post.getPreview() != null && !post.getPreview().isEmpty()) {
             try {
@@ -71,6 +81,12 @@ public class NewsDetailActivityFragment extends Fragment {
                 Log.e(TAG, "Could not display preview");
             }
         }
-
     }
+
+    public void showUrl(PostModel post) {
+        Intent intent = new Intent(getActivity(), WebActivity.class);
+        intent.putExtra(NewsDetailActivity.EXTRA_POST_MODEL, post);
+        startActivity(intent);
+    }
+
 }

@@ -14,6 +14,7 @@ public class PostModel implements Serializable {
     private String mImage;
     private String mPreview;
     private String mSubreddit;
+    private String mUrl;
 
     public String getSubreddit() {
         return mSubreddit;
@@ -75,6 +76,14 @@ public class PostModel implements Serializable {
 
     public void setPreview(String preview) {
         this.mPreview = preview;
+    }
+
+    public String getUrl() {
+        return mUrl;
+    }
+
+    public void setUrl(String url) {
+        this.mUrl = url;
     }
 
     @Override
