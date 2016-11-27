@@ -12,6 +12,7 @@ public class PostModel implements Serializable {
     private long mCreatedOn;
     private int mComments;
     private String mImage;
+    private String mPreview;
     private String mSubreddit;
 
     public String getSubreddit() {
@@ -63,8 +64,29 @@ public class PostModel implements Serializable {
             this.mImage = mImageUrl;
     }
 
-    public String getElapsedTime(){
-        CharSequence elapsed = DateUtils.getRelativeTimeSpanString (mCreatedOn * 1000, new Date().getTime(), DateUtils.HOUR_IN_MILLIS, 0);
+    public String getElapsedTime() {
+        CharSequence elapsed = DateUtils.getRelativeTimeSpanString(mCreatedOn * 1000, new Date().getTime(), DateUtils.HOUR_IN_MILLIS, 0);
         return elapsed.toString();
+    }
+
+    public String getPreview() {
+        return mPreview;
+    }
+
+    public void setPreview(String preview) {
+        this.mPreview = preview;
+    }
+
+    @Override
+    public String toString(){
+        String res = String.format("Title:\t%s\n" +
+                "Author:\t%s\n" +
+                "CreatedOn:\t%s\n" +
+                "Comments:\t%s\n" +
+                "Image:\t%s\n" +
+                "Preview:\t%s\n" +
+                "Subreddit:\t%s\n",
+                getTitle(), getAuthor(), getCreatedOn(), getComments(), getImage(), getPreview(), getSubreddit());
+        return res;
     }
 }

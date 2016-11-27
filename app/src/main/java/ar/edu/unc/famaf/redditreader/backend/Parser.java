@@ -88,11 +88,49 @@ public class Parser {
                 p.setComments(mReader.nextInt());
             else if (name.equalsIgnoreCase("subreddit"))
                 p.setSubreddit(mReader.nextString());
+            else if (name.equalsIgnoreCase("preview"))
+                readPreview(p);
             else
                 mReader.skipValue();
         }
         mReader.endObject();
+        Log.i(TAG, p.toString());
         listing.getPosts().add(p);
 
+    }
+
+    private void readPreview(PostModel p) throws IOException {
+        mReader.beginObject();//preview
+        while (mReader.hasNext()) {
+            String name = mReader.nextName();
+            if (name.equalsIgnoreCase("images"))
+                readPreviewImages(p);
+            else
+                mReader.skipValue();
+        }
+        mReader.endObject();
+    }
+
+    private void readPreviewImages(PostModel p) throws IOException {
+        mReader.beginArray();
+        while (mReader.hasNext()) {
+            mReader.beginObject();
+            while (mReader.hasNext()) {
+                if (mReader.nextName().equalsIgnoreCase("source")) {
+                    mReader.beginObject();
+                    while (mReader.hasNext()) {
+                        if (mReader.nextName().equalsIgnoreCase("url"))
+                            p.setPreview(mReader.nextString());
+                        else
+                            mReader.skipValue();
+                    }
+                    mReader.endObject();
+                } else
+                    mReader.skipValue();
+            }
+            mReader.endObject();
+        }
+
+        mReader.endArray();
     }
 }

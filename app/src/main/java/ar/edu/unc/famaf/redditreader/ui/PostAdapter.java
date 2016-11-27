@@ -103,11 +103,14 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
 
             DownloadImageAsyncTask downloadImageAsyncTask = new DownloadImageAsyncTask(getContext(),
                     viewHolder.mImageView, viewHolder.mProgressBar, position){
+
+
                 @Override
                 protected void onPostExecute(Bitmap result) {
                     if (result != null && getPosition() == position)
                         mImageView.setImageBitmap(result);
                     mProgressBar.setVisibility(View.GONE);
+                    mImageView.setVisibility(View.VISIBLE);
                 }
             };
             downloadImageAsyncTask.execute(urlArray);
@@ -144,56 +147,6 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
             mCommentsView = comments;
             mCreatedOnView = createdOn;
             mSubreddit = subreddit;
-        }
-    }
-
-    protected class DownloadImageAsyncTask extends AsyncTask<URL, Integer, Bitmap> {
-        private static final String TAG = "REDDITREADER.ASYNC";
-        ImageView mImageView;
-        ProgressBar mProgressBar;
-        Context mContext;
-        private int mPosition;
-
-        public int getPosition()
-        {
-            return mPosition;
-        }
-
-        public DownloadImageAsyncTask(Context context, ImageView img, ProgressBar progress, int position) {
-            mImageView = img;
-            mProgressBar = progress;
-            mContext = context;
-            mPosition = position;
-        }
-
-        @Override
-        public void onPreExecute() {
-            super.onPreExecute();
-            mImageView.setImageResource(R.drawable.reddit_icon);
-            mProgressBar.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected Bitmap doInBackground(URL... urls) {
-            RedditDBHelper dbHelper = new RedditDBHelper(mContext);
-            URL url = urls[0];
-            if (url == null)
-                return null;
-            Bitmap bitmap = dbHelper.getImage(url);
-            HttpURLConnection connection = null;
-            if (bitmap == null && new Utils(mContext).checkInternetConnection()) {
-                try {
-                    connection = (HttpURLConnection) url.openConnection();
-                    connection.setReadTimeout(3000);
-                    InputStream is = connection.getInputStream();
-                    bitmap = BitmapFactory.decodeStream(is, null, null);
-                } catch (Exception e) {
-                    Log.e(TAG, e.getMessage());
-                }
-                dbHelper.persistImage(url.toString(), bitmap);
-            }
-            return bitmap;
-
         }
     }
 }

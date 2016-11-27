@@ -1,12 +1,18 @@
 package ar.edu.unc.famaf.redditreader.ui;
 
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import java.net.URL;
 
 import ar.edu.unc.famaf.redditreader.R;
 import ar.edu.unc.famaf.redditreader.model.PostModel;
@@ -16,7 +22,7 @@ import ar.edu.unc.famaf.redditreader.model.PostModel;
  * A simple {@link Fragment} subclass.
  */
 public class NewsDetailActivityFragment extends Fragment {
-
+    private final static String TAG = "REDDIT_DETAILSFRAGMENT";
 
     public NewsDetailActivityFragment() {
         // Required empty public constructor
@@ -43,6 +49,28 @@ public class NewsDetailActivityFragment extends Fragment {
         TextView created = (TextView) getView().findViewById(R.id.details_date);
         created.setText(post.getElapsedTime());
 
-    }
+        if (post.getPreview() != null && !post.getPreview().isEmpty()) {
+            try {
+                URL[] urlArray = new URL[1];
+                urlArray[0] = new URL(post.getPreview());
 
+                ImageView preview = (ImageView) getView().findViewById(R.id.details_preview);
+                ProgressBar progress = (ProgressBar) getView().findViewById(R.id.details_progress_bar);
+                DownloadImageAsyncTask task = new DownloadImageAsyncTask(getContext(), preview, progress, 0) {
+                    @Override
+                    protected void onPostExecute(Bitmap result) {
+                        if (result != null) {
+                            mImageView.setImageBitmap(result);
+                            mImageView.setVisibility(View.VISIBLE);
+                        }
+                        mProgressBar.setVisibility(View.GONE);
+                    }
+                };
+                task.execute(urlArray);
+            } catch (Exception e) {
+                Log.e(TAG, "Could not display preview");
+            }
+        }
+
+    }
 }
