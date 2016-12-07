@@ -104,7 +104,13 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
             DownloadImageAsyncTask downloadImageAsyncTask = new DownloadImageAsyncTask(getContext(),
                     viewHolder.mImageView, viewHolder.mProgressBar, position){
 
-
+                @Override
+                public void onPreExecute() {
+                    super.onPreExecute();
+                    mImageView.setVisibility(View.GONE);
+                    mProgressBar.setVisibility(View.VISIBLE);
+                    mImageView.setImageResource(R.drawable.reddit_icon);
+                }
                 @Override
                 protected void onPostExecute(Bitmap result) {
                     if (result != null && getPosition() == position)

@@ -11,6 +11,7 @@ public class PostModel implements Serializable {
     private String mAuthor;
     private long mCreatedOn;
     private int mComments;
+    private String mId;
     private String mImage;
     private String mPreview;
     private String mSubreddit;
@@ -56,6 +57,14 @@ public class PostModel implements Serializable {
         this.mComments = mComments;
     }
 
+    public String getId() {
+        return mId;
+    }
+
+    public void setId(String id) {
+        this.mId = id;
+    }
+
     public String getImage() {
         return mImage;
     }
@@ -87,14 +96,14 @@ public class PostModel implements Serializable {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         String res = String.format("Title:\t%s\n" +
-                "Author:\t%s\n" +
-                "CreatedOn:\t%s\n" +
-                "Comments:\t%s\n" +
-                "Image:\t%s\n" +
-                "Preview:\t%s\n" +
-                "Subreddit:\t%s\n",
+                        "Author:\t%s\n" +
+                        "CreatedOn:\t%s\n" +
+                        "Comments:\t%s\n" +
+                        "Image:\t%s\n" +
+                        "Preview:\t%s\n" +
+                        "Subreddit:\t%s\n",
                 getTitle(), getAuthor(), getCreatedOn(), getComments(), getImage(), getPreview(), getSubreddit());
         return res;
     }

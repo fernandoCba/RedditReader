@@ -37,13 +37,6 @@ public class DownloadImageAsyncTask extends AsyncTask<URL, Integer, Bitmap> {
     }
 
     @Override
-    public void onPreExecute() {
-        super.onPreExecute();
-        mImageView.setVisibility(View.GONE);
-        mProgressBar.setVisibility(View.VISIBLE);
-    }
-
-    @Override
     protected Bitmap doInBackground(URL... urls) {
         RedditDBHelper dbHelper = new RedditDBHelper(mContext);
         URL url = urls[0];

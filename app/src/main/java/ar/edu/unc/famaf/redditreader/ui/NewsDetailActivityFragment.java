@@ -68,6 +68,13 @@ public class NewsDetailActivityFragment extends Fragment {
                 ProgressBar progress = (ProgressBar) getView().findViewById(R.id.details_progress_bar);
                 DownloadImageAsyncTask task = new DownloadImageAsyncTask(getContext(), preview, progress, 0) {
                     @Override
+                    public void onPreExecute() {
+                        super.onPreExecute();
+                        mImageView.setVisibility(View.GONE);
+                        mProgressBar.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
                     protected void onPostExecute(Bitmap result) {
                         if (result != null) {
                             mImageView.setImageBitmap(result);

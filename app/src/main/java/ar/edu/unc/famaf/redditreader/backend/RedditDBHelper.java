@@ -24,6 +24,7 @@ public class RedditDBHelper extends SQLiteOpenHelper {
     private static final String DBName = "redditFernando.db";
     private static final String POST_TABLE = "posts";
     private static final String POST_TABLE_ID = "_id";
+    private static final String POST_TABLE_POST_ID = "post_id";
     private static final String POST_TABLE_AUTHOR = "author";
     private static final String POST_TABLE_TITLE = "title";
     private static final String POST_TABLE_COMMENTS = "num_comments";
@@ -37,7 +38,7 @@ public class RedditDBHelper extends SQLiteOpenHelper {
     private static final String IMAGE_TABLE = "images";
     private static final String IMAGE_TABLE_URL = "url";
     private static final String IMAGE_TABLE_BITMAP = "data";
-    private static final int ACTUAL_VERSION = 1;
+    private static final int ACTUAL_VERSION = 2;
 
     private RedditDBHelper(Context context, int version) {
         super(context, DBName, null, version);
@@ -69,6 +70,7 @@ public class RedditDBHelper extends SQLiteOpenHelper {
             values.put(POST_TABLE_SUBREDDIT, p.getSubreddit());
             values.put(POST_TABLE_PREVIEW, p.getPreview());
             values.put(POST_TABLE_LINK_URL, p.getUrl());
+            values.put(POST_TABLE_POST_ID, p.getId());
             db.insert(POST_TABLE, null, values);
         }
         db.close();
@@ -84,6 +86,7 @@ public class RedditDBHelper extends SQLiteOpenHelper {
                 post.setAuthor(cursor.getString(cursor.getColumnIndexOrThrow(POST_TABLE_AUTHOR)));
                 post.setComments(cursor.getInt(cursor.getColumnIndexOrThrow(POST_TABLE_COMMENTS)));
                 post.setCreatedOn(cursor.getLong(cursor.getColumnIndexOrThrow(POST_TABLE_CREATED_ON)));
+                post.setId(cursor.getString(cursor.getColumnIndexOrThrow(POST_TABLE_POST_ID)));
                 post.setImageUrl(cursor.getString(cursor.getColumnIndexOrThrow(POST_TABLE_IMAGE)));
                 post.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(POST_TABLE_TITLE)));
                 post.setSubreddit(cursor.getString(cursor.getColumnIndexOrThrow(POST_TABLE_SUBREDDIT)));
@@ -104,8 +107,9 @@ public class RedditDBHelper extends SQLiteOpenHelper {
                 + ");";
         String createPostTableQuery = "CREATE TABLE `" + POST_TABLE + "` ("
                 + "`" + POST_TABLE_ID + "`	INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + "`" + POST_TABLE_TITLE + "`	TEXT NOT NULL,"
-                + "`" + POST_TABLE_AUTHOR + "`	TEXT NOT NULL,"
+                + "`" + POST_TABLE_POST_ID + "`	TEXT NOT NULL,"
+                + "`" + POST_TABLE_TITLE + "` TEXT NOT NULL,"
+                + "`" + POST_TABLE_AUTHOR + "` TEXT NOT NULL,"
                 + "`" + POST_TABLE_CREATED_ON + "` TEXT NOT NULL,"
                 + "`" + POST_TABLE_COMMENTS + "` INTEGER NOT NULL,"
                 + "`" + POST_TABLE_SUBREDDIT + "` TEXT NOT NULL,"
