@@ -17,6 +17,8 @@ import android.widget.TextView;
 import java.net.URL;
 
 import ar.edu.unc.famaf.redditreader.R;
+import ar.edu.unc.famaf.redditreader.backend.GetCommentsTask;
+import ar.edu.unc.famaf.redditreader.model.CommentModel;
 import ar.edu.unc.famaf.redditreader.model.PostModel;
 
 
@@ -59,6 +61,23 @@ public class NewsDetailActivityFragment extends Fragment {
             }
         });
 
+        showPreview(post);
+        showComments(post);
+    }
+
+    private void showComments(PostModel post) {
+        CommentModel model;
+        GetCommentsTask commentsTaks = new GetCommentsTask(post) {
+            @Override
+            protected void onPostExecute(CommentModel commentModel) {
+                super.onPostExecute(commentModel);
+                Log.e("TAG", "hola");
+            }
+        };
+        commentsTaks.execute();
+    }
+
+    private void showPreview(PostModel post) {
         if (post.getPreview() != null && !post.getPreview().isEmpty()) {
             try {
                 URL[] urlArray = new URL[1];
