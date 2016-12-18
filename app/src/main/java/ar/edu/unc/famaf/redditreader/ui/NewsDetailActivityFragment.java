@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -37,7 +38,7 @@ public class NewsDetailActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_news_detail_activity, container, false);
+        return inflater.inflate(R.layout.fragment_news_detail, container, false);
     }
 
     public void updateContent(final PostModel post) {
@@ -66,15 +67,21 @@ public class NewsDetailActivityFragment extends Fragment {
     }
 
     private void showComments(PostModel post) {
-        CommentModel model;
         GetCommentsTask commentsTaks = new GetCommentsTask(post) {
             @Override
             protected void onPostExecute(CommentModel commentModel) {
                 super.onPostExecute(commentModel);
-                Log.e("TAG", "hola");
+                setCommentListAdapter(commentModel);
             }
         };
         commentsTaks.execute();
+
+    }
+
+    private void setCommentListAdapter(CommentModel model){
+        ListView listView = (ListView) getActivity().findViewById(R.id.comments_list_view);
+        CommentsAdapter adapter = new CommentsAdapter(getActivity(), R.layout.fragment_news_detail, model.getSubComments());
+        listView.setAdapter(adapter);
     }
 
     private void showPreview(PostModel post) {
@@ -102,7 +109,7 @@ public class NewsDetailActivityFragment extends Fragment {
                         mProgressBar.setVisibility(View.GONE);
                     }
                 };
-                task.execute(urlArray);
+                //task.execute(urlArray);
             } catch (Exception e) {
                 Log.e(TAG, "Could not display preview");
             }

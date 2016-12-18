@@ -96,5 +96,15 @@
                 android:layout_gravity="center_horizontal"/>
 
         </LinearLayout>
+
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/comments_list_view"
+            android:layout_below="@id/details_linear_layout"
+            android:headerDividersEnabled="false">
+
+        </ListView>
     </RelativeLayout>
 </FrameLayout>
