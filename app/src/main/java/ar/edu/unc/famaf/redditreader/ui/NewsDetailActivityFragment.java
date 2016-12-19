@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.net.URL;
@@ -109,7 +110,7 @@ public class NewsDetailActivityFragment extends Fragment {
                         mProgressBar.setVisibility(View.GONE);
                     }
                 };
-                //task.execute(urlArray);
+                task.execute(urlArray);
             } catch (Exception e) {
                 Log.e(TAG, "Could not display preview");
             }
