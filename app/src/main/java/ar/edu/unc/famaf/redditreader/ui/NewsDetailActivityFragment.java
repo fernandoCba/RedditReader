@@ -80,7 +80,7 @@ public class NewsDetailActivityFragment extends Fragment {
 
     private void setCommentListAdapter(CommentModel model){
         ListView listView = (ListView) getActivity().findViewById(R.id.comments_list_view);
-        CommentsAdapter adapter = new CommentsAdapter(getActivity(), R.layout.fragment_news_detail, model.getSubComments());
+        CommentsAdapter adapter = new CommentsAdapter(getActivity(), R.layout.fragment_news_detail, model.getFlatList());
         listView.setAdapter(adapter);
     }
 

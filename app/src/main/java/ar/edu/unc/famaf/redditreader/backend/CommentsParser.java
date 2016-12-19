@@ -4,9 +4,6 @@ import android.util.JsonReader;
 import android.util.JsonToken;
 import android.util.Log;
 
-import org.json.JSONObject;
-import org.json.JSONTokener;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -80,7 +77,7 @@ public class CommentsParser {
                     if (commentKey.equalsIgnoreCase("author"))
                         newComment.setAuthor(mReader.nextString());
                     else if (commentKey.equalsIgnoreCase("created_utc"))
-                        newComment.setCreated(mReader.nextString());
+                        newComment.setCreated(mReader.nextLong());
                     else if (commentKey.equalsIgnoreCase("body"))
                         newComment.setBody(mReader.nextString());
                     else if (commentKey.equalsIgnoreCase("replies") && mReader.peek() == JsonToken.BEGIN_OBJECT)
@@ -88,7 +85,7 @@ public class CommentsParser {
                     else
                         mReader.skipValue();
                 }
-                if (newComment.getmAuthor() != null)
+                if (newComment.getAuthor() != null)
                     comments.getSubComments().add(newComment);
 
                 mReader.endObject();
