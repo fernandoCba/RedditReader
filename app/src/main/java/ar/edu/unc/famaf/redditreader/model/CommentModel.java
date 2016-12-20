@@ -12,7 +12,8 @@ public class CommentModel {
     long mCreated;
     int mDepth = -1;
     List<CommentModel> mSubComments = new ArrayList<CommentModel>();
-
+    private int commentsRead = 0;
+    private final int LIMIT = 50;
 
     public String getAuthor() {
         return mAuthor;
@@ -54,8 +55,12 @@ public class CommentModel {
     }
 
     private void dfTree(CommentModel c, List<CommentModel> dfList) {
-        if (c.getAuthor() != null)//don't add the root
+        if (c.getAuthor() != null && commentsRead < LIMIT) {//don't add the root
             dfList.add(c);
+            commentsRead++;
+        } else if (commentsRead >= LIMIT)
+            return;
+
         for (CommentModel child : c.mSubComments) {
             child.mDepth = c.mDepth + 1;
             dfTree(child, dfList);
