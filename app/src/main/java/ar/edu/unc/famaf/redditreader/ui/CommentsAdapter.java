@@ -70,7 +70,7 @@ public class CommentsAdapter extends android.widget.ArrayAdapter<CommentModel> {
         viewHolder.mAauthor.setText(comment.getAuthor());
         viewHolder.mBody.setText(comment.getBody());
         viewHolder.mCreatedOn.setText(comment.getElapsedTime());
-        convertView.setPadding((30*comment.getDepth()), convertView.getPaddingTop(),
+        convertView.setPadding((30 * comment.getDepth()), convertView.getPaddingTop(),
                 convertView.getPaddingRight(), convertView.getPaddingBottom());
 
         return convertView;

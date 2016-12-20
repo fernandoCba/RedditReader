@@ -14,7 +14,7 @@ import ar.edu.unc.famaf.redditreader.R;
 import ar.edu.unc.famaf.redditreader.model.PostModel;
 
 
-public class NewsActivity extends AppCompatActivity implements OnItemClickListener{
+public class NewsActivity extends AppCompatActivity implements OnItemClickListener {
     public static String EXTRA_POST_MODEL = "REDDITREADER.UI.POSTMODEL";
     static final int LOGIN_REQUEST = 1000;
 

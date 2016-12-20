@@ -10,7 +10,8 @@ import android.net.NetworkInfo;
 
 public class Utils {
     Context mContext;
-    public Utils(Context context){
+
+    public Utils(Context context) {
         mContext = context;
     }
 

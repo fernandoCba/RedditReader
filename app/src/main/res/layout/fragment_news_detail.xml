@@ -3,14 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="ar.edu.unc.famaf.redditreader.ui.NewsDetailActivityFragment">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+
     <ScrollView
         android:id="@+id/details_scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="275dp">
+        android:layout_height="match_parent">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -83,11 +80,11 @@
 
             <LinearLayout
                 android:id="@+id/details_linear_layout"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/details_url"
+                android:layout_below="@id/details_url"
                 android:orientation="vertical">
 
                 <ImageView
@@ -107,19 +104,18 @@
 
             </LinearLayout>
 
+            <ListView
+                android:id="@+id/comments_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="375dp"
+                android:layout_below="@id/details_linear_layout"
+                android:headerDividersEnabled="false">
+
+            </ListView>
 
         </RelativeLayout>
 
     </ScrollView>
-    <ListView
-        android:id="@+id/comments_list_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:headerDividersEnabled="false">
-
-    </ListView>
-
-</LinearLayout>
 
 
 </FrameLayout>

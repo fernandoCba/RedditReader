@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -79,8 +80,15 @@ public class NewsDetailActivityFragment extends Fragment {
 
     }
 
-    private void setCommentListAdapter(CommentModel model){
+    private void setCommentListAdapter(CommentModel model) {
         ListView listView = (ListView) getActivity().findViewById(R.id.comments_list_view);
+        listView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                v.getParent().requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+        });
         CommentsAdapter adapter = new CommentsAdapter(getActivity(), R.layout.fragment_news_detail, model.getFlatList());
         listView.setAdapter(adapter);
     }

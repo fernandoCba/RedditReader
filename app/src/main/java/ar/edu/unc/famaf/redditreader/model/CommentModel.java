@@ -38,8 +38,7 @@ public class CommentModel {
         return mCreated;
     }
 
-    public int getDepth()
-    {
+    public int getDepth() {
         return mDepth;
     }
 

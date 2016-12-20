@@ -80,7 +80,7 @@ public class Parser {
                 p.setAuthor(mReader.nextString());
             else if (name.equalsIgnoreCase("created"))
                 p.setCreatedOn(mReader.nextLong());
-            else if(name.equalsIgnoreCase("id"))
+            else if (name.equalsIgnoreCase("id"))
                 p.setId(mReader.nextString());
             else if (name.equalsIgnoreCase("title"))
                 p.setTitle(mReader.nextString());
