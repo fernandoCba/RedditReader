@@ -66,7 +66,7 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
     @NonNull
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder = null;
+        final ViewHolder viewHolder;
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.post_row, null);
@@ -118,9 +118,15 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
                         mImageView.setImageBitmap(result);
                     mProgressBar.setVisibility(View.GONE);
                     mImageView.setVisibility(View.VISIBLE);
+                    viewHolder.isDownloading = false;
                 }
             };
-            downloadImageAsyncTask.execute(urlArray);
+
+            if(!viewHolder.isDownloading){
+                viewHolder.isDownloading = true;
+                downloadImageAsyncTask.execute(urlArray);
+
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -139,6 +145,7 @@ public class PostAdapter extends android.widget.ArrayAdapter<PostModel> {
     }
 
     private class ViewHolder {
+        public boolean isDownloading=false;
         public final ImageView mImageView;
         public final ProgressBar mProgressBar;
         public final TextView mPostContentView;

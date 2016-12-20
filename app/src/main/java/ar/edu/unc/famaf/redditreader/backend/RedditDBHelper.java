@@ -35,10 +35,7 @@ public class RedditDBHelper extends SQLiteOpenHelper {
     private static final String POST_TABLE_LINK_URL = "url";
 
 
-    private static final String IMAGE_TABLE = "images";
-    private static final String IMAGE_TABLE_URL = "url";
-    private static final String IMAGE_TABLE_BITMAP = "data";
-    private static final int ACTUAL_VERSION = 2;
+    private static final int ACTUAL_VERSION = 3;
 
     private RedditDBHelper(Context context, int version) {
         super(context, DBName, null, version);
@@ -101,10 +98,6 @@ public class RedditDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createImageTableQuery = "CREATE TABLE `" + IMAGE_TABLE + "` ("
-                + "`" + IMAGE_TABLE_URL + "`	TEXT PRIMARY KEY,"
-                + "`" + IMAGE_TABLE_BITMAP + "` BLOB NOT NULL"
-                + ");";
         String createPostTableQuery = "CREATE TABLE `" + POST_TABLE + "` ("
                 + "`" + POST_TABLE_ID + "`	INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + "`" + POST_TABLE_POST_ID + "`	TEXT NOT NULL,"
@@ -118,47 +111,12 @@ public class RedditDBHelper extends SQLiteOpenHelper {
                 + "`" + POST_TABLE_IMAGE + "` TEXT"
                 + ");";
 
-        db.execSQL(createImageTableQuery);
         db.execSQL(createPostTableQuery);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + POST_TABLE);
-        db.execSQL("DROP TABLE IF EXISTS " + IMAGE_TABLE);
         this.onCreate(db);
-    }
-
-    public void persistImage(String s, Bitmap bitmap) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
-        values.put(IMAGE_TABLE_BITMAP, stream.toByteArray());
-        values.put(IMAGE_TABLE_URL, s);
-        db.insertWithOnConflict(IMAGE_TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-        db.close();
-    }
-
-    public Bitmap getImage(URL url) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Bitmap bitmap = null;
-        Cursor cursor = db.query(
-                IMAGE_TABLE,
-                new String[]{IMAGE_TABLE_BITMAP},
-                IMAGE_TABLE_URL + " = ?",
-                new String[]{url.toString()},
-                null,
-                null,
-                null,
-                null
-        );
-        if (cursor.moveToFirst()) {
-            byte[] rawImage = cursor.getBlob(cursor.getColumnIndexOrThrow(IMAGE_TABLE_BITMAP));
-            bitmap = BitmapFactory.decodeByteArray(rawImage, 0, rawImage.length);
-        }
-        db.close();
-        return bitmap;
-
     }
 }
